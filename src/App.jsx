@@ -18,7 +18,9 @@ function App() {
         <Route
           path='/dashboard'
           element={
-            <PrivateRoute element={<Dashboard />} isAuthenticated={isAuthenticated} />
+            <PrivateRoute isAuthenticated={isAuthenticated}>
+            <Dashboard />
+          </PrivateRoute>
           }
         />
       </Routes>
