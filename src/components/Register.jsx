@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Logo from '../assets/images/logo.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Register() {
+
+  const [error,setError]=useState("");
+  const navigate = useNavigate();
   // Form validation schema with Yup
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -37,9 +41,27 @@ function Register() {
       confirmPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log('Form data', values);
-      // Handle registration logic here (e.g., API call)
+    onSubmit: async(values) =>  {
+     
+      
+      try {
+        // Send a POST request to the registration endpoint
+        const response = await axios.post('http://localhost:5000/api/auth/register', {
+          firstname: values.firstName,
+          lastname: values.lastName,
+          email: values.email,
+          mobile: values.mobile,
+          password: values.password,
+        });
+
+        if (response.data) {
+          alert('success')
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('Error registering user:', error);
+        setError("Your Registration Failed, Try again");
+      }
     },
   });
 
@@ -200,7 +222,7 @@ function Register() {
             Create Account
           </button>
         </form>
-        <p className='text-center text-xs text-red-500 font-bold mt-5'>Your password or email is incorrect</p>
+        <p className='text-center text-xs text-red-500 font-bold mt-5'>{error}</p>
         <p className='text-xs mt-5 text-center font-semibold'>Already have an account? <Link className='hover:cursor-pointer' to='/'><span className='text-red-500 '>Login</span></Link></p>
       </div>
     </div>

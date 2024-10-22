@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import logo from '../assets/images/logo.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
+  const [error,setError]=useState("");
+  const navigate = useNavigate();
   // Form validation schema with Yup
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -22,9 +25,24 @@ function Login() {
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log('Form data', values);
-      // Handle login logic here (e.g., API call)
+    onSubmit:async (values) => {
+      
+      try {
+        // Send a POST request to the registration endpoint
+        const response = await axios.post('http://localhost:5000/api/auth/login', {
+          
+          email: values.email,
+          password: values.password,
+        });
+
+        if (response.data) {
+          localStorage.setItem('token', response.data.token);
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        console.error('Error logging user:', error);
+        setError("Login failed");
+      }
     },
   });
 
@@ -91,7 +109,7 @@ function Login() {
             Sign in
           </button>
         </form>
-        <p className='text-center text-xs text-red-500 font-bold mt-3'>Your password or email is incorrect</p>
+        <p className='text-center text-xs text-red-500 font-bold mt-3'>{error}</p>
         <p className='text-xs mt-10 text-center font-semibold'>Don't have an account? <Link to='/register'><span className='text-red-500 hover:cursor-pointer'>Create an account </span></Link>  </p>
       </div>
     </div>
