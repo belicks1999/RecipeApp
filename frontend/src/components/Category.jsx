@@ -37,7 +37,7 @@ function Category({hanldeFav,user}) {
     const fetchrecipeIds = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:5000/api/auth/getrecipe?userId=${user.id}`, {
+        const response = await axios.get(`https://recipe-app-backend-seven.vercel.app/api/auth/getrecipe?userId=${user.id}`, {
           headers: {
             'x-auth-token': token // Include the token in the headers
           }

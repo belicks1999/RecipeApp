@@ -18,7 +18,7 @@ function Favourite({ user }) {
             setLoading(true); // Start loading
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`http://localhost:5000/api/auth/getrecipe?userId=${user.id}`, {
+                const response = await axios.get(`https://recipe-app-backend-seven.vercel.app/api/auth/getrecipe?userId=${user.id}`, {
                     headers: {
                         'x-auth-token': token // Include the token in the headers
                     }
@@ -66,7 +66,7 @@ function Favourite({ user }) {
   const handleDelete = async (id) => {
     try {
         const token = localStorage.getItem('token');
-        const response = await axios.delete(`http://localhost:5000/api/auth/deleteRecipe?userId=${user.id}&recipeId=${id}`, {
+        const response = await axios.delete(`https://recipe-app-backend-seven.vercel.app/api/auth/deleteRecipe?userId=${user.id}&recipeId=${id}`, {
             headers: {
                 'x-auth-token': token // Include the token in the headers
             }

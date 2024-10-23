@@ -41,7 +41,7 @@ const Dashboard = () => {
 
   const hanldeFav=async(id)=>{
     try {
-        const response= await axios.post('http://localhost:5000/api/auth/recipe',{ recipeId: id, userId: user.id });
+        const response= await axios.post('https://recipe-app-backend-seven.vercel.app/api/auth/recipe',{ recipeId: id, userId: user.id });
         console.log("Favorite added:", response.data);
         toast.success('Recipe added to Favourite !');
         

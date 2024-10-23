@@ -48,7 +48,7 @@ function Register() {
       
       try {
         // Send a POST request to the registration endpoint
-        const response = await axios.post('http://localhost:5000/api/auth/register', {
+        const response = await axios.post('https://recipe-app-backend-seven.vercel.app/api/auth/register', {
           firstname: values.firstName,
           lastname: values.lastName,
           email: values.email,
