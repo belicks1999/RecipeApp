@@ -86,6 +86,29 @@ function Category({hanldeFav,user}) {
     setIsModalOpen(false);
   };
 
+  const hanldeDel = async (id) => {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.delete(`https://recipe-app-backend-seven.vercel.app/api/auth/deleteRecipe?userId=${user.id}&recipeId=${id}`, {
+            headers: {
+                'x-auth-token': token // Include the token in the headers
+            }
+        });
+
+        if (response.status === 200) {
+            // Handle successful deletion
+            console.log('Recipe deleted successfully:', response.data);
+            toast.error('Recipe Unfavourite !');
+            setRecipeIds((prevRecipes) => prevRecipes.filter(recipeId => recipeId !== id));
+            
+        } else {
+            console.log('Failed to delete recipe:', response.data.msg);
+        }
+    } catch (error) {
+        console.error('Error while deleting the recipe:', error);
+    }
+};
+
   return (
     <div className='lg:px-32  min-h-screen'>
        <ToastContainer />
@@ -113,7 +136,7 @@ function Category({hanldeFav,user}) {
               <div className='pt-2 px-4 flex space-x-3'>
                 <p className='mt-1'>{selectedCategory}</p>
                 {recipeIds.includes(recipe.idMeal) ? (
-            <FaHeart className='mt-1 text-xl text-red-500' onClick={() => { hanldeFav(recipe.idMeal) }} />
+            <FaHeart className='mt-1 text-xl text-red-500' onClick={() => { hanldeDel(recipe.idMeal) }} />
           ) : (
             <CiHeart className='mt-1 text-2xl' onClick={() => { hanldeFav(recipe.idMeal) }} />
           )}
