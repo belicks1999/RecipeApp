@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 import Category from './Category';
 import Favourite from './Favourite';
 import axios from 'axios';
-import User from '../../backend/Model/User';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
