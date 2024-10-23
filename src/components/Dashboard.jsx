@@ -46,6 +46,7 @@ const Dashboard = () => {
         
     } catch (error) {
         console.error("Error adding favorite:", error);
+        toast.error('Recipe already added to Favourite !');
     }
    
   }

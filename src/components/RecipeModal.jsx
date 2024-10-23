@@ -2,7 +2,7 @@
 import React from 'react';
 
 const RecipeModal = ({ isOpen, onClose, recipe }) => {
-  if (!isOpen || !recipe) return null; // If the modal is not open or there's no recipe data, return null
+  if (!isOpen || !recipe) return null;
 
   // Function to truncate text for mobile view
   const truncateText = (text, length) => {

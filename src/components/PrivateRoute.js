@@ -1,9 +1,16 @@
-// src/components/PrivateRoute.js
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children, isAuthenticated }) => {
-  return isAuthenticated && children ;
+    const navigate = useNavigate();
+
+    React.useEffect(() => {
+        if (!isAuthenticated) {
+            navigate('/'); // Navigate to the login page
+        }
+    }, [isAuthenticated, navigate]);
+
+    return isAuthenticated ? children : null; // Render children if authenticated
 };
 
 export default PrivateRoute;

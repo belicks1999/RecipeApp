@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import Logo from '../assets/images/logo.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
 
@@ -55,11 +57,12 @@ function Register() {
         });
 
         if (response.data) {
-          alert('success')
+          toast.success('Registration Succesful !');
           navigate('/');
         }
       } catch (error) {
         console.error('Error registering user:', error);
+        toast.error('Registration Failed !');
         setError("Your Registration Failed, Try again");
       }
     },
@@ -67,6 +70,7 @@ function Register() {
 
   return (
     <div className='bg-neutral-300 h-screen flex justify-center items-center'>
+      <ToastContainer />
       <div className='bg-white p-10 lg:px-20 rounded-lg lg:max-w-xl w-80 lg:w-full flex flex-col'>
         <img src={Logo} alt="logo" className='w-24 mb-6 mx-auto mt-7' />
         <p className='text-lg font-semibold mb-3'>Register</p>

@@ -6,11 +6,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Category({hanldeFav}) {
-  const [categories, setCategories] = useState([]); // State to hold categories
-  const [recipes, setRecipes] = useState([]); // State to hold recipes
-  const [selectedCategory, setSelectedCategory] = useState(null); // State to hold selected category
-  const [selectedRecipe, setSelectedRecipe] = useState(null); // State to hold selected recipe details
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [categories, setCategories] = useState([]); 
+  const [recipes, setRecipes] = useState([]); 
+  const [selectedCategory, setSelectedCategory] = useState(null); 
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -27,17 +27,17 @@ function Category({hanldeFav}) {
       }
     };
 
-    fetchCategories(); // Call the function to fetch categories
+    fetchCategories(); 
   }, []);
 
   // Fetch recipes based on selected category
   useEffect(() => {
     const fetchRecipes = async () => {
-      if (!selectedCategory) return; // No category selected
+      if (!selectedCategory) return; 
 
       try {
         const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`);
-        setRecipes(response.data.meals); // Set fetched recipes
+        setRecipes(response.data.meals); 
       } catch (error) {
         console.error("Error fetching recipes:", error);
       }
@@ -50,8 +50,8 @@ function Category({hanldeFav}) {
   const fetchRecipeDetails = async (idMeal) => {
     try {
       const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`);
-      setSelectedRecipe(response.data.meals[0]); // Set the selected recipe details
-      setIsModalOpen(true); // Open the modal
+      setSelectedRecipe(response.data.meals[0]);
+      setIsModalOpen(true); 
     } catch (error) {
       console.error("Error fetching recipe details:", error);
     }
@@ -64,9 +64,9 @@ function Category({hanldeFav}) {
   };
 
   return (
-    <div className='lg:px-32'>
+    <div className='lg:px-32  min-h-screen'>
        <ToastContainer />
-      <ul className='flex flex-wrap lg:justify-start justify-center space-x-3 lg:space-x-5 p-2 lg:p-5 lg:px-10 mb-5'>
+      <ul className='flex flex-wrap lg:justify-start justify-center space-x-3 lg:space-x-5 p-2 lg:p-5 lg:px-10 mb-5 '>
         {categories.map((category) => (
           <li
             className={`rounded-full border text-sm ${category.strCategory===selectedCategory?'bg-red-500 text-white':'text-red-500'} border-red-500 p-2 lg:p-4 w-28 lg:w-40 text-center hover:cursor-pointer mb-2 lg:mb-0`}
@@ -97,7 +97,9 @@ function Category({hanldeFav}) {
             </div>
           ))
         ) : (
-          <p className='text-center text-lg'>No recipes available. Please select a category.</p>
+                <div className='col-span-full flex justify-center items-center min-h-80'>
+                <p className='text-center text-lg'>No recipes available.</p>
+                </div>
         )}
       </div>
 

@@ -17,8 +17,12 @@ function Favourite({ user }) {
         const fetchFavoriteRecipes = async () => {
             setLoading(true); // Start loading
             try {
-                // Fetch recipe IDs for the logged-in user
-                const response = await axios.get(`http://localhost:5000/api/auth/getrecipe?userId=${user.id}`);
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://localhost:5000/api/auth/getrecipe?userId=${user.id}`, {
+                    headers: {
+                        'x-auth-token': token // Include the token in the headers
+                    }
+                });
                 const ids = response.data; // Assuming this returns an array of recipe IDs
                 setRecipeIds(ids); // Set recipe IDs
 
@@ -61,8 +65,12 @@ function Favourite({ user }) {
 
   const handleDelete = async (id) => {
     try {
-        // Make the request to delete the recipe
-        const response = await axios.delete(`http://localhost:5000/api/auth/deleteRecipe?userId=${user.id}&recipeId=${id}`);
+        const token = localStorage.getItem('token');
+        const response = await axios.delete(`http://localhost:5000/api/auth/deleteRecipe?userId=${user.id}&recipeId=${id}`, {
+            headers: {
+                'x-auth-token': token // Include the token in the headers
+            }
+        });
 
         if (response.status === 200) {
             // Handle successful deletion
@@ -110,7 +118,9 @@ function Favourite({ user }) {
                     </div>
                 ))
             ) : (
-                <p className='text-center text-lg'>No recipes available.</p>
+                <div className='col-span-full flex justify-center items-center min-h-80'>
+                <p className='text-center text-lg'>No Favourite recipes available.</p>
+                </div>
             )}
         </div>
             {/* Recipe Modal */}
