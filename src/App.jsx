@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard'; // Import your Dashboard component
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import PrivateRoute from './components/PrivateRoute.js';
+
 
 function App() {
   // Check if user is authenticated
@@ -15,14 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        <Route
-          path='/dashboard'
-          element={
-            <PrivateRoute isAuthenticated={isAuthenticated}>
-            <Dashboard />
-          </PrivateRoute>
-          }
-        />
+        <Route path='/dashboard' element={<Dashboard/>}/>
       </Routes>
     </Router>
   );

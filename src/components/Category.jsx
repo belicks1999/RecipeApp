@@ -4,13 +4,15 @@ import { CiHeart } from "react-icons/ci";
 import RecipeModal from './RecipeModal'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaHeart } from "react-icons/fa6";
 
-function Category({hanldeFav}) {
+function Category({hanldeFav,user}) {
   const [categories, setCategories] = useState([]); 
   const [recipes, setRecipes] = useState([]); 
   const [selectedCategory, setSelectedCategory] = useState(null); 
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); 
+  const[recipeIds,setRecipeIds]=useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,6 +31,27 @@ function Category({hanldeFav}) {
 
     fetchCategories(); 
   }, []);
+
+
+  useEffect(() => {
+    const fetchrecipeIds = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5000/api/auth/getrecipe?userId=${user.id}`, {
+          headers: {
+            'x-auth-token': token // Include the token in the headers
+          }
+        });
+        const ids = response.data; // Assuming this returns an array of recipe IDs
+        setRecipeIds(ids);
+      } catch (error) {
+        console.error("Error fetching favorite recipes:", error);
+      }
+    };
+  
+    // Call the function to fetch recipe IDs
+    fetchrecipeIds();
+  }, [user.id]); 
 
   // Fetch recipes based on selected category
   useEffect(() => {
@@ -78,7 +101,7 @@ function Category({hanldeFav}) {
         ))}
       </ul>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2'>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 px-2'>
         {recipes && recipes.length > 0 ? (
           recipes.map((recipe) => (
             <div
@@ -88,8 +111,12 @@ function Category({hanldeFav}) {
             >
               <img onClick={() => fetchRecipeDetails(recipe.idMeal)}  src={recipe.strMealThumb} alt={recipe.strMeal} className='w-full rounded-3xl h-48 object-cover' />
               <div className='pt-2 px-4 flex space-x-3'>
-                <p>{selectedCategory}</p>
-                <CiHeart className='mt-1 text-xl' onClick={()=>{hanldeFav(recipe.idMeal)}} />
+                <p className='mt-1'>{selectedCategory}</p>
+                {recipeIds.includes(recipe.idMeal) ? (
+            <FaHeart className='mt-1 text-xl text-red-500' onClick={() => { hanldeFav(recipe.idMeal) }} />
+          ) : (
+            <CiHeart className='mt-1 text-2xl' onClick={() => { hanldeFav(recipe.idMeal) }} />
+          )}
               </div>
               <div className='px-4 pb-5 pt-3'>
                 <h2 onClick={() => fetchRecipeDetails(recipe.idMeal)}  className='font-bold text-md'>{recipe.strMeal}</h2>

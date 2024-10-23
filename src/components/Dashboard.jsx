@@ -10,6 +10,7 @@ import User from '../../backend/Model/User';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 const Dashboard = () => {
   const [user, setUser] = useState({});
   const [activeComponent, setActiveComponent] = useState('category'); // State to manage active component
@@ -56,7 +57,7 @@ const Dashboard = () => {
       <Navbar activeComponent={activeComponent} onNavClick={handleNavClick} /> 
       <ToastContainer />
       <div className='bg-red-50 h-full'>
-        {activeComponent === 'category' ? <Category hanldeFav={hanldeFav} /> : <Favourite user={user} />} 
+        {activeComponent === 'category' ? <Category hanldeFav={hanldeFav} user={user} /> : <Favourite user={user} />} 
       </div>
     </>
   );

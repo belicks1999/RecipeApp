@@ -93,10 +93,10 @@ function Favourite({ user }) {
     return (
     <div className='lg:px-32'>
          <ToastContainer />
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 min-h-screen'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4 px-2 min-h-screen'>
             {recipes.length > 0 ? (
                 recipes.map((recipe) => (
-                    <div key={recipe.idMeal} className='border h-80 my-2 rounded-lg overflow-hidden shadow-lg cursor-pointer'>
+                    <div key={recipe.idMeal} className='border h-80 lg:my-2 rounded-lg overflow-hidden shadow-lg cursor-pointer'>
                         <img
                             onClick={() => openModal(recipe)} // Handle click to fetch more details
                             src={recipe.strMealThumb}
