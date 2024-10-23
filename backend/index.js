@@ -11,7 +11,11 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: 'https://recipe-app-ivory-one.vercel.app', // Allow only your frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods
+    
+  }));
 
 connectDB();
 
