@@ -114,3 +114,27 @@ export const addfav = async (req, res) => {
     }
     };
 
+    export const deleteFavoriteRecipe = async (req, res) => {
+    
+      const { userId, recipeId } = req.query; // Get userId and recipeId from query params
+  
+      if (!userId || !recipeId) {
+          return res.status(400).json({ msg: 'User ID and Recipe ID are required' });
+      }
+  
+      try {
+          // Find and delete the recipe for the given user ID and recipe ID
+          const deletedRecipe = await Recipe.findOneAndDelete({ userId, recipeId });
+  
+          if (!deletedRecipe) {
+              return res.status(404).json({ msg: 'Favorite recipe not found for this user.' });
+          }
+  
+          res.json({ msg: 'Favorite recipe deleted successfully.' });
+      } catch (error) {
+          console.error('Error deleting favorite recipe:', error);
+          res.status(500).json({ msg: 'Server error' });
+      }
+  };
+  
+

@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaHeart } from "react-icons/fa6";
+import RecipeModal from './RecipeModal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Favourite({ user }) {
     const [recipeIds, setRecipeIds] = useState([]); // State to store recipe IDs
     const [recipes, setRecipes] = useState([]); // State to store fetched recipe details
     const [loading, setLoading] = useState(true); // State to track loading status
+    const [selectedRecipe, setSelectedRecipe] = useState(null); // State to hold selected recipe details
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+
 
     useEffect(() => {
         const fetchFavoriteRecipes = async () => {
@@ -41,29 +47,61 @@ function Favourite({ user }) {
         }
     };
 
+    const openModal = (recipe) => {
+        setSelectedRecipe(recipe);
+        setIsModalOpen(true);
+    };
+
+
+    // Function to close the modal
+  const closeModal = () => {
+    setSelectedRecipe(null);
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+        // Make the request to delete the recipe
+        const response = await axios.delete(`http://localhost:5000/api/auth/deleteRecipe?userId=${user.id}&recipeId=${id}`);
+
+        if (response.status === 200) {
+            // Handle successful deletion
+            console.log('Recipe deleted successfully:', response.data);
+            toast.error('Recipe Deleted !');
+            setRecipes((prevRecipes) => prevRecipes.filter(recipe => recipe.idMeal !== id));
+            
+        } else {
+            console.log('Failed to delete recipe:', response.data.msg);
+        }
+    } catch (error) {
+        console.error('Error while deleting the recipe:', error);
+    }
+};
+
     if (loading) {
         return <p className='text-center text-lg'>Loading recipes...</p>;
     }
 
     return (
-    <div className='px-32'>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 h-screen'>
+    <div className='lg:px-32'>
+         <ToastContainer />
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2 min-h-screen'>
             {recipes.length > 0 ? (
                 recipes.map((recipe) => (
-                    <div key={recipe.idMeal} className='border h-80 mt-10 rounded-lg overflow-hidden shadow-lg cursor-pointer'>
+                    <div key={recipe.idMeal} className='border h-80 my-2 rounded-lg overflow-hidden shadow-lg cursor-pointer'>
                         <img
-                            onClick={() => fetchRecipeDetails(recipe.idMeal)} // Handle click to fetch more details
+                            onClick={() => openModal(recipe)} // Handle click to fetch more details
                             src={recipe.strMealThumb}
                             alt={recipe.strMeal}
                             className='w-full rounded-3xl h-48 object-cover'
                         />
                         <div className='pt-2 px-4 flex space-x-3'>
                             <p>{recipe.strCategory}</p> {/* Display the category */}
-                            <FaHeart style={{color:'red'}} className='mt-1 text-xl text-red-600'  onClick={() => handleFav(recipe.idMeal)} />
+                            <FaHeart style={{color:'red'}} className='mt-1 text-lg text-red-600'  onClick={() => handleDelete(recipe.idMeal)} />
                         </div>
                         <div className='px-4 pb-5 pt-3'>
                             <h2
-                                onClick={() => fetchRecipeDetails(recipe.idMeal)} // Handle click to fetch more details
+                               onClick={() => openModal(recipe)} // Handle click to fetch more details
                                 className='font-bold text-md'
                             >
                                 {recipe.strMeal}
@@ -75,7 +113,12 @@ function Favourite({ user }) {
                 <p className='text-center text-lg'>No recipes available.</p>
             )}
         </div>
-
+            {/* Recipe Modal */}
+      <RecipeModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        recipe={selectedRecipe}
+      />
 
     </div>
 

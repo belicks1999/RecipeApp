@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { CiHeart } from "react-icons/ci";
-import RecipeModal from './RecipeModal'; // Import the modal component
+import RecipeModal from './RecipeModal'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Category({hanldeFav}) {
   const [categories, setCategories] = useState([]); // State to hold categories
@@ -63,6 +65,7 @@ function Category({hanldeFav}) {
 
   return (
     <div className='lg:px-32'>
+       <ToastContainer />
       <ul className='flex flex-wrap lg:justify-start justify-center space-x-3 lg:space-x-5 p-2 lg:p-5 lg:px-10 mb-5'>
         {categories.map((category) => (
           <li

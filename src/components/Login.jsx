@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import logo from '../assets/images/logo.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
   const [error,setError]=useState("");
@@ -37,10 +39,12 @@ function Login() {
 
         if (response.data) {
           localStorage.setItem('token', response.data.token);
+          toast.success('Login Succesful !');
           navigate('/dashboard');
         }
       } catch (error) {
         console.error('Error logging user:', error);
+        toast.error('Login Failed!');
         setError("Login failed");
       }
     },
@@ -48,6 +52,7 @@ function Login() {
 
   return (
     <div className='bg-neutral-300 h-screen flex justify-center items-center'>
+      <ToastContainer />
       <div className='bg-white p-10 rounded-lg max-w-md w-auto lg:w-96 flex flex-col'>
        
         <img src={logo} alt="logo" className='w-24 mb-6 mx-auto mt-7' />

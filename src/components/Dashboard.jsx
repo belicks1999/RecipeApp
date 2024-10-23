@@ -7,6 +7,8 @@ import Category from './Category';
 import Favourite from './Favourite';
 import axios from 'axios';
 import User from '../../backend/Model/User';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
   const [user, setUser] = useState({});
@@ -40,6 +42,7 @@ const Dashboard = () => {
     try {
         const response= await axios.post('http://localhost:5000/api/auth/recipe',{ recipeId: id, userId: user.id });
         console.log("Favorite added:", response.data);
+        toast.success('Recipe added to Favourite !');
         
     } catch (error) {
         console.error("Error adding favorite:", error);
@@ -50,6 +53,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar activeComponent={activeComponent} onNavClick={handleNavClick} /> 
+      <ToastContainer />
       <div className='bg-red-50 h-full'>
         {activeComponent === 'category' ? <Category hanldeFav={hanldeFav} /> : <Favourite user={user} />} 
       </div>
